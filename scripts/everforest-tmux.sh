@@ -33,27 +33,23 @@ main()
   show_ssh_session_port=$(get_tmux_option "@everforest_tmux-show-ssh-session-port" false)
   IFS=' ' read -r -a plugins <<< $(get_tmux_option "@everforest_tmux-plugins" "battery network weather")
   show_empty_plugins=$(get_tmux_option "@everforest_tmux-show-empty-plugins" true)
-
-  # Custom Theme
-  light_gray='#f8f8f2'
-  dark_gray='#232A2E'
-  dark_blue='#3A515D'
-  aqua='#83C092'
-  blue='#7FBBB3'
-  green='#A7C080'
-  orange='#E69875'
-  red='#E67E80'
-  pink='#D699B6'
-  yellow='#e8d582'
-
-  var="$(defaults read -g AppleInterfaceStyle 2>/dev/null)"
-
-  if [[ $var =~ "Dark" ]]; then
+  theme=$(get_tmux_option "@everforest_tmux-theme" dark)
+  if [[ $theme == "dark" ]]; then
     # Dark Status Line
-    gray='#3c464b'
-  else
+    source $current_dir/themes/dark.theme
+  elif [[ $theme == "light" ]]; then
     # Light Status Line
-    gray='#E5DFC5'
+    source $current_dir/themes/light.theme
+  elif [[ $theme == "auto" ]]; then
+    var="$(defaults read -g AppleInterfaceStyle 2>/dev/null)"
+
+    if [[ $var =~ "Dark" ]]; then
+      # Dark Status Line
+    source $current_dir/themes/dark.theme
+    else
+      # Light Status Line
+    source $current_dir/themes/light.theme
+    fi
   fi
 
   # Handle left icon configuration
