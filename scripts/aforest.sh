@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+!/usr/bin/env bash
 # setting the locale, some users have issues with different locales, this forces the correct one
 export LC_ALL=en_US.UTF-8
 
@@ -232,6 +232,10 @@ main()
     elif [ $plugin = "spotify-tui" ]; then
       IFS=' ' read -r -a colors <<<$(get_tmux_option "@aforest-spotify-tui-colors" "green dark_gray")
       script="#($current_dir/spotify-tui.sh)"
+
+    elif [ $plugin = "apple-music" ]; then
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@aforest-apple-music-colors" "green dark_gray")
+      script="#($current_dir/apple-music.sh)"
 
     elif [ $plugin = "kubernetes-context" ]; then
       IFS=' ' read -r -a colors <<<$(get_tmux_option "@aforest-kubernetes-context-colors" "blue dark_gray")
