@@ -4,7 +4,7 @@
 
 current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-$current_dir/scripts/aforest.conf
+$current_dir/scripts/everforest-tmux.sh
 
 # theme_option="@aforest-theme"
 # default_theme="dark"
