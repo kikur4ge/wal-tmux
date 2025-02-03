@@ -1,1 +1,3 @@
 data/weather.txt
+.DS_store
+*.DS_store
