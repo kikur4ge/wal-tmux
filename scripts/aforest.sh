@@ -8,44 +8,53 @@ source $current_dir/utils.sh
 main()
 {
   # set configuration option variables
-  show_kubernetes_context_label=$(get_tmux_option "@dracula-kubernetes-context-label" "")
-  eks_hide_arn=$(get_tmux_option "@dracula-kubernetes-eks-hide-arn" false)
-  eks_extract_account=$(get_tmux_option "@dracula-kubernetes-eks-extract-account" false)
-  hide_kubernetes_user=$(get_tmux_option "@dracula-kubernetes-hide-user" false)
-  terraform_label=$(get_tmux_option "@dracula-terraform-label" "")
-  show_fahrenheit=$(get_tmux_option "@dracula-show-fahrenheit" true)
-  show_location=$(get_tmux_option "@dracula-show-location" true)
-  fixed_location=$(get_tmux_option "@dracula-fixed-location")
-  show_powerline=$(get_tmux_option "@dracula-show-powerline" false)
-  show_flags=$(get_tmux_option "@dracula-show-flags" false)
-  show_left_icon=$(get_tmux_option "@dracula-show-left-icon" smiley)
-  show_left_icon_padding=$(get_tmux_option "@dracula-left-icon-padding" 1)
-  show_military=$(get_tmux_option "@dracula-military-time" false)
-  timezone=$(get_tmux_option "@dracula-set-timezone" "")
-  show_timezone=$(get_tmux_option "@dracula-show-timezone" true)
-  show_left_sep=$(get_tmux_option "@dracula-show-left-sep" )
-  show_right_sep=$(get_tmux_option "@dracula-show-right-sep" )
-  show_border_contrast=$(get_tmux_option "@dracula-border-contrast" false)
-  show_day_month=$(get_tmux_option "@dracula-day-month" false)
-  show_refresh=$(get_tmux_option "@dracula-refresh-rate" 5)
-  show_synchronize_panes_label=$(get_tmux_option "@dracula-synchronize-panes-label" "Sync")
-  time_format=$(get_tmux_option "@dracula-time-format" "")
-  show_ssh_session_port=$(get_tmux_option "@dracula-show-ssh-session-port" false)
-  IFS=' ' read -r -a plugins <<< $(get_tmux_option "@dracula-plugins" "battery network weather")
-  show_empty_plugins=$(get_tmux_option "@dracula-show-empty-plugins" true)
+  show_kubernetes_context_label=$(get_tmux_option "@aforest-kubernetes-context-label" "")
+  eks_hide_arn=$(get_tmux_option "@aforest-kubernetes-eks-hide-arn" false)
+  eks_extract_account=$(get_tmux_option "@aforest-kubernetes-eks-extract-account" false)
+  hide_kubernetes_user=$(get_tmux_option "@aforest-kubernetes-hide-user" false)
+  terraform_label=$(get_tmux_option "@aforest-terraform-label" "")
+  show_fahrenheit=$(get_tmux_option "@aforest-show-fahrenheit" true)
+  show_location=$(get_tmux_option "@aforest-show-location" true)
+  fixed_location=$(get_tmux_option "@aforest-fixed-location")
+  show_powerline=$(get_tmux_option "@aforest-show-powerline" false)
+  show_flags=$(get_tmux_option "@aforest-show-flags" false)
+  show_left_icon=$(get_tmux_option "@aforest-show-left-icon" smiley)
+  show_left_icon_padding=$(get_tmux_option "@aforest-left-icon-padding" 1)
+  show_military=$(get_tmux_option "@aforest-military-time" false)
+  timezone=$(get_tmux_option "@aforest-set-timezone" "")
+  show_timezone=$(get_tmux_option "@aforest-show-timezone" true)
+  show_left_sep=$(get_tmux_option "@aforest-show-left-sep" )
+  show_right_sep=$(get_tmux_option "@aforest-show-right-sep" )
+  show_border_contrast=$(get_tmux_option "@aforest-border-contrast" false)
+  show_day_month=$(get_tmux_option "@aforest-day-month" false)
+  show_refresh=$(get_tmux_option "@aforest-refresh-rate" 5)
+  show_synchronize_panes_label=$(get_tmux_option "@aforest-synchronize-panes-label" "Sync")
+  time_format=$(get_tmux_option "@aforest-time-format" "")
+  show_ssh_session_port=$(get_tmux_option "@aforest-show-ssh-session-port" false)
+  IFS=' ' read -r -a plugins <<< $(get_tmux_option "@aforest-plugins" "battery network weather")
+  show_empty_plugins=$(get_tmux_option "@aforest-show-empty-plugins" true)
 
-  # Dracula Color Pallette
-  white='#f8f8f2'
-  gray='#44475a'
-  dark_gray='#282a36'
-  light_purple='#bd93f9'
-  dark_purple='#6272a4'
-  cyan='#8be9fd'
-  green='#50fa7b'
-  orange='#ffb86c'
-  red='#ff5555'
-  pink='#ff79c6'
-  yellow='#f1fa8c'
+  # Custom Theme
+  light_gray='#f8f8f2'
+  dark_gray='#232A2E'
+  dark_blue='#3A515D'
+  aqua='#83C092'
+  blue='#7FBBB3'
+  green='#A7C080'
+  orange='#E69875'
+  red='#E67E80'
+  pink='#D699B6'
+  yellow='#e8d582'
+
+  var="$(defaults read -g AppleInterfaceStyle 2>/dev/null)"
+
+  if [[ $var =~ "Dark" ]]; then
+    # Dark Status Line
+    gray='#3c464b'
+  else
+    # Light Status Line
+    gray='#E5DFC5'
+  fi
 
   # Handle left icon configuration
   case $show_left_icon in
@@ -91,8 +100,8 @@ main()
       flags=""
       current_flags="";;
     true)
-      flags="#{?window_flags,#[fg=${dark_purple}]#{window_flags},}"
-      current_flags="#{?window_flags,#[fg=${light_purple}]#{window_flags},}"
+      flags="#{?window_flags,#[fg=${aqua}]#{window_flags},}"
+      current_flags="#{?window_flags,#[fg=${dark_blue}]#{window_flags},}"
   esac
 
   # sets refresh interval to every 5 seconds
@@ -111,17 +120,17 @@ main()
 
   # pane border styling
   if $show_border_contrast; then
-    tmux set-option -g pane-active-border-style "fg=${light_purple}"
+    tmux set-option -g pane-active-border-style "fg=${dark_blue}"
   else
-    tmux set-option -g pane-active-border-style "fg=${dark_purple}"
+    tmux set-option -g pane-active-border-style "fg=${aqua}"
   fi
   tmux set-option -g pane-border-style "fg=${gray}"
 
   # message styling
-  tmux set-option -g message-style "bg=${gray},fg=${white}"
+  tmux set-option -g message-style "bg=${gray},fg=${dark_gray}"
 
   # status bar
-  tmux set-option -g status-style "bg=${gray},fg=${white}"
+  tmux set-option -g status-style "bg=${gray},fg=${dark_gray}"
 
   # Status left
   if $show_powerline; then
@@ -139,7 +148,7 @@ main()
     if case $plugin in custom:*) true;; *) false;; esac; then
       script=${plugin#"custom:"}
       if [[ -x "${current_dir}/${script}" ]]; then
-        IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-custom-plugin-colors" "cyan dark_gray")
+        IFS=' ' read -r -a colors <<<$(get_tmux_option "@aforest-custom-plugin-colors" "blue dark_gray")
         script="#($current_dir/${script})"
       else
         colors[0]="red"
@@ -148,100 +157,100 @@ main()
       fi
 
     elif [ $plugin = "cwd" ]; then
-      IFS=' ' read -r -a colors  <<< $(get_tmux_option "@dracula-cwd-colors" "dark_gray white")
+      IFS=' ' read -r -a colors  <<< $(get_tmux_option "@aforest-cwd-colors" "dark_gray dark_gray")
       tmux set-option -g status-right-length 250
       script="#($current_dir/cwd.sh)"
 
     elif [ $plugin = "fossil" ]; then
-      IFS=' ' read -r -a colors  <<< $(get_tmux_option "@dracula-fossil-colors" "green dark_gray")
+      IFS=' ' read -r -a colors  <<< $(get_tmux_option "@aforest-fossil-colors" "green dark_gray")
       tmux set-option -g status-right-length 250
       script="#($current_dir/fossil.sh)"
 
     elif [ $plugin = "git" ]; then
-      IFS=' ' read -r -a colors  <<< $(get_tmux_option "@dracula-git-colors" "green dark_gray")
+      IFS=' ' read -r -a colors  <<< $(get_tmux_option "@aforest-git-colors" "green dark_gray")
       tmux set-option -g status-right-length 250
       script="#($current_dir/git.sh)"
 
     elif [ $plugin = "hg" ]; then
-      IFS=' ' read -r -a colors  <<< $(get_tmux_option "@dracula-hg-colors" "green dark_gray")
+      IFS=' ' read -r -a colors  <<< $(get_tmux_option "@aforest-hg-colors" "green dark_gray")
       tmux set-option -g status-right-length 250
       script="#($current_dir/hg.sh)"
 
     elif [ $plugin = "battery" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-battery-colors" "pink dark_gray")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@aforest-battery-colors" "pink dark_gray")
       script="#($current_dir/battery.sh)"
 
     elif [ $plugin = "gpu-usage" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-gpu-usage-colors" "pink dark_gray")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@aforest-gpu-usage-colors" "pink dark_gray")
       script="#($current_dir/gpu_usage.sh)"
 
     elif [ $plugin = "gpu-ram-usage" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-gpu-ram-usage-colors" "cyan dark_gray")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@aforest-gpu-ram-usage-colors" "blue dark_gray")
       script="#($current_dir/gpu_ram_info.sh)"
 
     elif [ $plugin = "gpu-power-draw" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-gpu-power-draw-colors" "green dark_gray")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@aforest-gpu-power-draw-colors" "green dark_gray")
       script="#($current_dir/gpu_power.sh)"
 
     elif [ $plugin = "cpu-usage" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-cpu-usage-colors" "orange dark_gray")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@aforest-cpu-usage-colors" "orange dark_gray")
       script="#($current_dir/cpu_info.sh)"
 
     elif [ $plugin = "ram-usage" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-ram-usage-colors" "cyan dark_gray")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@aforest-ram-usage-colors" "blue dark_gray")
       script="#($current_dir/ram_info.sh)"
 
     elif [ $plugin = "tmux-ram-usage" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-tmux-ram-usage-colors" "cyan dark_gray")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@aforest-tmux-ram-usage-colors" "blue dark_gray")
       script="#($current_dir/tmux_ram_info.sh)"
 
     elif [ $plugin = "network" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-network-colors" "cyan dark_gray")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@aforest-network-colors" "blue dark_gray")
       script="#($current_dir/network.sh)"
 
     elif [ $plugin = "network-bandwidth" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-network-bandwidth-colors" "cyan dark_gray")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@aforest-network-bandwidth-colors" "blue dark_gray")
       tmux set-option -g status-right-length 250
       script="#($current_dir/network_bandwidth.sh)"
 
     elif [ $plugin = "network-ping" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-network-ping-colors" "cyan dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@aforest-network-ping-colors" "blue dark_gray")
       script="#($current_dir/network_ping.sh)"
 
     elif [ $plugin = "network-vpn" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-network-vpn-colors" "cyan dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@aforest-network-vpn-colors" "blue dark_gray")
       script="#($current_dir/network_vpn.sh)"
 
     elif [ $plugin = "attached-clients" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-attached-clients-colors" "cyan dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@aforest-attached-clients-colors" "blue dark_gray")
       script="#($current_dir/attached_clients.sh)"
 
     elif [ $plugin = "mpc" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-mpc-colors" "green dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@aforest-mpc-colors" "green dark_gray")
       script="#($current_dir/mpc.sh)"
 
     elif [ $plugin = "spotify-tui" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-spotify-tui-colors" "green dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@aforest-spotify-tui-colors" "green dark_gray")
       script="#($current_dir/spotify-tui.sh)"
 
     elif [ $plugin = "kubernetes-context" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-kubernetes-context-colors" "cyan dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@aforest-kubernetes-context-colors" "blue dark_gray")
       script="#($current_dir/kubernetes_context.sh $eks_hide_arn $eks_extract_account $hide_kubernetes_user $show_kubernetes_context_label)"
 
     elif [ $plugin = "terraform" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-terraform-colors" "light_purple dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@aforest-terraform-colors" "dark_blue dark_gray")
       script="#($current_dir/terraform.sh $terraform_label)"
 
     elif [ $plugin = "continuum" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-continuum-colors" "cyan dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@aforest-continuum-colors" "blue dark_gray")
       script="#($current_dir/continuum.sh)"
 
     elif [ $plugin = "weather" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-weather-colors" "orange dark_gray")
-      script="#($current_dir/weather_wrapper.sh $show_fahrenheit $show_location '$fixed_location')"
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@aforest-weather-colors" "orange dark_gray")
+      script="#($current_dir/weather_wrapper.sh $show_fahrenheit $show_location $fixed_location)"
 
     elif [ $plugin = "time" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-time-colors" "dark_purple white")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@aforest-time-colors" "aqua dark_gray")
       if [ -n "$time_format" ]; then
         script=${time_format}
       else
@@ -256,11 +265,11 @@ main()
         fi
       fi
     elif [ $plugin = "synchronize-panes" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-synchronize-panes-colors" "cyan dark_gray")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@aforest-synchronize-panes-colors" "blue dark_gray")
       script="#($current_dir/synchronize_panes.sh $show_synchronize_panes_label)"
 
     elif [ $plugin = "ssh-session" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-ssh-session-colors" "green dark_gray")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@aforest-ssh-session-colors" "green dark_gray")
       script="#($current_dir/ssh_session.sh $show_ssh_session_port)"
 
     else
@@ -285,12 +294,12 @@ main()
 
   # Window option
   if $show_powerline; then
-    tmux set-window-option -g window-status-current-format "#[fg=${gray},bg=${dark_purple}]${left_sep}#[fg=${white},bg=${dark_purple}] #I #W${current_flags} #[fg=${dark_purple},bg=${gray}]${left_sep}"
+    tmux set-window-option -g window-status-current-format "#[fg=${gray},bg=${aqua}]${left_sep}#[fg=${dark_gray},bg=${dark_purple}] #I #W${current_flags} #[fg=${dark_purple},bg=${gray}]${left_sep}"
   else
-    tmux set-window-option -g window-status-current-format "#[fg=${white},bg=${dark_purple}] #I #W${current_flags} "
+    tmux set-window-option -g window-status-current-format "#[fg=${dark_gray},bg=${aqua}] #I #W${current_flags} "
   fi
 
-  tmux set-window-option -g window-status-format "#[fg=${white}]#[bg=${gray}] #I #W${flags}"
+  tmux set-window-option -g window-status-format "#[fg=${dark_gray}]#[bg=${gray}] #I #W${flags}"
   tmux set-window-option -g window-status-activity-style "bold"
   tmux set-window-option -g window-status-bell-style "bold"
 }
