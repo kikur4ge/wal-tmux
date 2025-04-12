@@ -40,16 +40,6 @@ main()
   elif [[ $theme == "light" ]]; then
     # Light Status Line
     source $current_dir/themes/light.theme
-  elif [[ $theme == "auto" ]]; then
-    var="$(defaults read -g AppleInterfaceStyle 2>/dev/null)"
-
-    if [[ $var =~ "Dark" ]]; then
-      # Dark Status Line
-    source $current_dir/themes/dark.theme
-    else
-      # Light Status Line
-    source $current_dir/themes/light.theme
-    fi
   fi
 
   # Handle left icon configuration
