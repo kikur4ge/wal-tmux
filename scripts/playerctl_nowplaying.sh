@@ -6,7 +6,8 @@ source $current_dir/utils.sh
 
 main()
 {
-    player=$(playerctl -l 2> /dev/null)
+    player=$(playerctl -l | head -n 1)
+    echo $player
     if [[ $player == "" ]]; then
         echo ""
     else
