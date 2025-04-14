@@ -15,7 +15,6 @@ main()
 
         RATE=$(get_tmux_option "@dracula-refresh-rate" 5)
 
-        echo_track
         echo "$artist - $title"
     fi
 }
