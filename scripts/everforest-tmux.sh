@@ -224,7 +224,7 @@ main()
       script="#($current_dir/apple-music.sh)"
 
     elif [ $plugin = "playerctl" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@everforest_tmux-apple-music-colors" "green dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@everforest_tmux-playerctl-colors" "green dark_gray")
       script="#($current_dir/playerctl_nowplaying.sh)"
 
     elif [ $plugin = "kubernetes-context" ]; then
