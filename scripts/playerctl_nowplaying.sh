@@ -1,7 +1,11 @@
 #!/bin/sh
 
-player=$(playerctl -l)
-title=$(playerctl -p $player metadata title)
-artist=$(playerctl -p $player metadata artist)
+player=$(playerctl -l 2> /dev/null)
+if [[ $player == "" ]]; then
+    echo ""
+else
+    title=$(playerctl -p $player metadata title)
+    artist=$(playerctl -p $player metadata artist)
 
-echo "$artist - $title"
+    echo "$artist - $title"
+fi
