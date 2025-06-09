@@ -40,6 +40,9 @@ main()
   elif [[ $theme == "light" ]]; then
     # Light Status Line
     source $current_dir/themes/light.theme
+  elif [[ $theme == "pywal" ]]; then
+    # Light Status Line
+    source $current_dir/themes/pywal.theme
   fi
 
   # Handle left icon configuration
