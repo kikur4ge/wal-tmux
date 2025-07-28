@@ -4,4 +4,4 @@
 
 current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-$current_dir/scripts/everforest-tmux.sh
+$current_dir/scripts/wal-tmux.sh
