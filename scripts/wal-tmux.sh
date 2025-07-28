@@ -8,32 +8,32 @@ source $current_dir/utils.sh
 main()
 {
   # set configuration option variables
-  show_kubernetes_context_label=$(get_tmux_option "@everforest_tmux-kubernetes-context-label" "")
-  eks_hide_arn=$(get_tmux_option "@everforest_tmux-kubernetes-eks-hide-arn" false)
-  eks_extract_account=$(get_tmux_option "@everforest_tmux-kubernetes-eks-extract-account" false)
-  hide_kubernetes_user=$(get_tmux_option "@everforest_tmux-kubernetes-hide-user" false)
-  terraform_label=$(get_tmux_option "@everforest_tmux-terraform-label" "")
-  show_fahrenheit=$(get_tmux_option "@everforest_tmux-show-fahrenheit" true)
-  show_location=$(get_tmux_option "@everforest_tmux-show-location" true)
-  fixed_location=$(get_tmux_option "@everforest_tmux-fixed-location")
-  show_powerline=$(get_tmux_option "@everforest_tmux-show-powerline" false)
-  show_flags=$(get_tmux_option "@everforest_tmux-show-flags" false)
-  show_left_icon=$(get_tmux_option "@everforest_tmux-show-left-icon" smiley)
-  show_left_icon_padding=$(get_tmux_option "@everforest_tmux-left-icon-padding" 1)
-  show_military=$(get_tmux_option "@everforest_tmux-military-time" false)
-  timezone=$(get_tmux_option "@everforest_tmux-set-timezone" "")
-  show_timezone=$(get_tmux_option "@everforest_tmux-show-timezone" true)
-  show_left_sep=$(get_tmux_option "@everforest_tmux-show-left-sep" )
-  show_right_sep=$(get_tmux_option "@everforest_tmux-show-right-sep" )
-  show_border_contrast=$(get_tmux_option "@everforest_tmux-border-contrast" false)
-  show_day_month=$(get_tmux_option "@everforest_tmux-day-month" false)
-  show_refresh=$(get_tmux_option "@everforest_tmux-refresh-rate" 5)
-  show_synchronize_panes_label=$(get_tmux_option "@everforest_tmux-synchronize-panes-label" "Sync")
-  time_format=$(get_tmux_option "@everforest_tmux-time-format" "")
-  show_ssh_session_port=$(get_tmux_option "@everforest_tmux-show-ssh-session-port" false)
-  IFS=' ' read -r -a plugins <<< $(get_tmux_option "@everforest_tmux-plugins" "battery network weather")
-  show_empty_plugins=$(get_tmux_option "@everforest_tmux-show-empty-plugins" true)
-  theme=$(get_tmux_option "@everforest_tmux-theme" dark)
+  show_kubernetes_context_label=$(get_tmux_option "@wal_tmux-kubernetes-context-label" "")
+  eks_hide_arn=$(get_tmux_option "@wal_tmux-kubernetes-eks-hide-arn" false)
+  eks_extract_account=$(get_tmux_option "@wal_tmux-kubernetes-eks-extract-account" false)
+  hide_kubernetes_user=$(get_tmux_option "@wal_tmux-kubernetes-hide-user" false)
+  terraform_label=$(get_tmux_option "@wal_tmux-terraform-label" "")
+  show_fahrenheit=$(get_tmux_option "@wal_tmux-show-fahrenheit" true)
+  show_location=$(get_tmux_option "@wal_tmux-show-location" true)
+  fixed_location=$(get_tmux_option "@wal_tmux-fixed-location")
+  show_powerline=$(get_tmux_option "@wal_tmux-show-powerline" false)
+  show_flags=$(get_tmux_option "@wal_tmux-show-flags" false)
+  show_left_icon=$(get_tmux_option "@wal_tmux-show-left-icon" smiley)
+  show_left_icon_padding=$(get_tmux_option "@wal_tmux-left-icon-padding" 1)
+  show_military=$(get_tmux_option "@wal_tmux-military-time" false)
+  timezone=$(get_tmux_option "@wal_tmux-set-timezone" "")
+  show_timezone=$(get_tmux_option "@wal_tmux-show-timezone" true)
+  show_left_sep=$(get_tmux_option "@wal_tmux-show-left-sep" )
+  show_right_sep=$(get_tmux_option "@wal_tmux-show-right-sep" )
+  show_border_contrast=$(get_tmux_option "@wal_tmux-border-contrast" false)
+  show_day_month=$(get_tmux_option "@wal_tmux-day-month" false)
+  show_refresh=$(get_tmux_option "@wal_tmux-refresh-rate" 5)
+  show_synchronize_panes_label=$(get_tmux_option "@wal_tmux-synchronize-panes-label" "Sync")
+  time_format=$(get_tmux_option "@wal_tmux-time-format" "")
+  show_ssh_session_port=$(get_tmux_option "@wal_tmux-show-ssh-session-port" false)
+  IFS=' ' read -r -a plugins <<< $(get_tmux_option "@wal_tmux-plugins" "battery network weather")
+  show_empty_plugins=$(get_tmux_option "@wal_tmux-show-empty-plugins" true)
+  theme=$(get_tmux_option "@wal_tmux-theme" dark)
   if [[ $theme == "dark" ]]; then
     # Dark Status Line
     source $current_dir/themes/dark.theme
@@ -137,7 +137,7 @@ main()
     if case $plugin in custom:*) true;; *) false;; esac; then
       script=${plugin#"custom:"}
       if [[ -x "${current_dir}/${script}" ]]; then
-        IFS=' ' read -r -a colors <<<$(get_tmux_option "@everforest_tmux-custom-plugin-colors" "blue dark_gray")
+        IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-custom-plugin-colors" "blue dark_gray")
         script="#($current_dir/${script})"
       else
         colors[0]="red"
@@ -146,108 +146,108 @@ main()
       fi
 
     elif [ $plugin = "cwd" ]; then
-      IFS=' ' read -r -a colors  <<< $(get_tmux_option "@everforest_tmux-cwd-colors" "dark_gray dark_gray")
+      IFS=' ' read -r -a colors  <<< $(get_tmux_option "@wal_tmux-cwd-colors" "dark_gray dark_gray")
       tmux set-option -g status-right-length 250
       script="#($current_dir/cwd.sh)"
 
     elif [ $plugin = "fossil" ]; then
-      IFS=' ' read -r -a colors  <<< $(get_tmux_option "@everforest_tmux-fossil-colors" "green dark_gray")
+      IFS=' ' read -r -a colors  <<< $(get_tmux_option "@wal_tmux-fossil-colors" "green dark_gray")
       tmux set-option -g status-right-length 250
       script="#($current_dir/fossil.sh)"
 
     elif [ $plugin = "git" ]; then
-      IFS=' ' read -r -a colors  <<< $(get_tmux_option "@everforest_tmux-git-colors" "green dark_gray")
+      IFS=' ' read -r -a colors  <<< $(get_tmux_option "@wal_tmux-git-colors" "green dark_gray")
       tmux set-option -g status-right-length 250
       script="#($current_dir/git.sh)"
 
     elif [ $plugin = "hg" ]; then
-      IFS=' ' read -r -a colors  <<< $(get_tmux_option "@everforest_tmux-hg-colors" "green dark_gray")
+      IFS=' ' read -r -a colors  <<< $(get_tmux_option "@wal_tmux-hg-colors" "green dark_gray")
       tmux set-option -g status-right-length 250
       script="#($current_dir/hg.sh)"
 
     elif [ $plugin = "battery" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@everforest_tmux-battery-colors" "pink dark_gray")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@wal_tmux-battery-colors" "pink dark_gray")
       script="#($current_dir/battery.sh)"
 
     elif [ $plugin = "gpu-usage" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@everforest_tmux-gpu-usage-colors" "pink dark_gray")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@wal_tmux-gpu-usage-colors" "pink dark_gray")
       script="#($current_dir/gpu_usage.sh)"
 
     elif [ $plugin = "gpu-ram-usage" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@everforest_tmux-gpu-ram-usage-colors" "blue dark_gray")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@wal_tmux-gpu-ram-usage-colors" "blue dark_gray")
       script="#($current_dir/gpu_ram_info.sh)"
 
     elif [ $plugin = "gpu-power-draw" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@everforest_tmux-gpu-power-draw-colors" "green dark_gray")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@wal_tmux-gpu-power-draw-colors" "green dark_gray")
       script="#($current_dir/gpu_power.sh)"
 
     elif [ $plugin = "cpu-usage" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@everforest_tmux-cpu-usage-colors" "orange dark_gray")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@wal_tmux-cpu-usage-colors" "orange dark_gray")
       script="#($current_dir/cpu_info.sh)"
 
     elif [ $plugin = "ram-usage" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@everforest_tmux-ram-usage-colors" "blue dark_gray")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@wal_tmux-ram-usage-colors" "blue dark_gray")
       script="#($current_dir/ram_info.sh)"
 
     elif [ $plugin = "tmux-ram-usage" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@everforest_tmux-tmux-ram-usage-colors" "blue dark_gray")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@wal_tmux-tmux-ram-usage-colors" "blue dark_gray")
       script="#($current_dir/tmux_ram_info.sh)"
 
     elif [ $plugin = "network" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@everforest_tmux-network-colors" "blue dark_gray")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@wal_tmux-network-colors" "blue dark_gray")
       script="#($current_dir/network.sh)"
 
     elif [ $plugin = "network-bandwidth" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@everforest_tmux-network-bandwidth-colors" "blue dark_gray")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@wal_tmux-network-bandwidth-colors" "blue dark_gray")
       tmux set-option -g status-right-length 250
       script="#($current_dir/network_bandwidth.sh)"
 
     elif [ $plugin = "network-ping" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@everforest_tmux-network-ping-colors" "blue dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-network-ping-colors" "blue dark_gray")
       script="#($current_dir/network_ping.sh)"
 
     elif [ $plugin = "network-vpn" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@everforest_tmux-network-vpn-colors" "blue dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-network-vpn-colors" "blue dark_gray")
       script="#($current_dir/network_vpn.sh)"
 
     elif [ $plugin = "attached-clients" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@everforest_tmux-attached-clients-colors" "blue dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-attached-clients-colors" "blue dark_gray")
       script="#($current_dir/attached_clients.sh)"
 
     elif [ $plugin = "mpc" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@everforest_tmux-mpc-colors" "green dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-mpc-colors" "green dark_gray")
       script="#($current_dir/mpc.sh)"
 
     elif [ $plugin = "spotify-tui" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@everforest_tmux-spotify-tui-colors" "green dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-spotify-tui-colors" "green dark_gray")
       script="#($current_dir/spotify-tui.sh)"
 
     elif [ $plugin = "apple-music" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@everforest_tmux-apple-music-colors" "green dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-apple-music-colors" "green dark_gray")
       script="#($current_dir/apple-music.sh)"
 
     elif [ $plugin = "playerctl" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@everforest_tmux-playerctl-colors" "green dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-playerctl-colors" "green dark_gray")
       script="#($current_dir/playerctl_nowplaying.sh)"
 
     elif [ $plugin = "kubernetes-context" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@everforest_tmux-kubernetes-context-colors" "blue dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-kubernetes-context-colors" "blue dark_gray")
       script="#($current_dir/kubernetes_context.sh $eks_hide_arn $eks_extract_account $hide_kubernetes_user $show_kubernetes_context_label)"
 
     elif [ $plugin = "terraform" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@everforest_tmux-terraform-colors" "dark_blue dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-terraform-colors" "dark_blue dark_gray")
       script="#($current_dir/terraform.sh $terraform_label)"
 
     elif [ $plugin = "continuum" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@everforest_tmux-continuum-colors" "blue dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-continuum-colors" "blue dark_gray")
       script="#($current_dir/continuum.sh)"
 
     elif [ $plugin = "weather" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@everforest_tmux-weather-colors" "orange dark_gray")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@wal_tmux-weather-colors" "orange dark_gray")
       script="#($current_dir/weather_wrapper.sh $show_fahrenheit $show_location $fixed_location)"
 
     elif [ $plugin = "time" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@everforest_tmux-time-colors" "aqua dark_gray")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@wal_tmux-time-colors" "aqua dark_gray")
       if [ -n "$time_format" ]; then
         script=${time_format}
       else
@@ -262,11 +262,11 @@ main()
         fi
       fi
     elif [ $plugin = "synchronize-panes" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@everforest_tmux-synchronize-panes-colors" "blue dark_gray")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@wal_tmux-synchronize-panes-colors" "blue dark_gray")
       script="#($current_dir/synchronize_panes.sh $show_synchronize_panes_label)"
 
     elif [ $plugin = "ssh-session" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@everforest_tmux-ssh-session-colors" "green dark_gray")
+      IFS=' ' read -r -a colors <<< $(get_tmux_option "@wal_tmux-ssh-session-colors" "green dark_gray")
       script="#($current_dir/ssh_session.sh $show_ssh_session_port)"
 
     else
