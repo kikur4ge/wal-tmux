@@ -33,19 +33,15 @@ main() {
     show_ssh_session_port=$(get_tmux_option "@wal_tmux-show-ssh-session-port" false)
     IFS=' ' read -r -a plugins <<<$(get_tmux_option "@wal_tmux-plugins" "battery network weather")
     show_empty_plugins=$(get_tmux_option "@wal_tmux-show-empty-plugins" true)
-    theme=$(get_tmux_option "@wal_tmux-theme" dark)
 
+    text="${color0}"
 
-    gray="${color8}"
-    light_gray="${color15}"
-    dark_gray="${color0}"
-    blue="${color4}"
-    aqua="${color6}"
-    green="${color2}"
-    red="${color1}"
-    pink="${color5}"
-    yellow="${color3}"
-    white="#CBCCC6"
+    # message styling
+    tmux set-option -g message-style "bg=${color8},fg=${text}" # use cursor instead of background to not blend in with status bar
+
+    # status bar
+    tmux set-option -g status-style "bg=${color8},fg=${text}"
+
 
     # Handle left icon configuration
     case $show_left_icon in
@@ -100,8 +96,8 @@ main() {
         current_flags=""
         ;;
     true)
-        flags="#{?window_flags,#[fg=${aqua}]#{window_flags},}"
-        current_flags="#{?window_flags,#[fg=${dark_blue}]#{window_flags},}"
+        flags="#{?window_flags,#[fg=${color6}]#{window_flags},}"
+        current_flags="#{?window_flags,#[fg=${color4}]#{window_flags},}"
         ;;
     esac
 
@@ -121,24 +117,18 @@ main() {
 
     # pane border styling
     if $show_border_contrast; then
-        tmux set-option -g pane-active-border-style "fg=${dark_blue}"
+        tmux set-option -g pane-active-border-style "fg=${color4}"
     else
-        tmux set-option -g pane-active-border-style "fg=${aqua}"
+        tmux set-option -g pane-active-border-style "fg=${color6}"
     fi
-    tmux set-option -g pane-border-style "fg=${gray}"
-
-    # message styling
-    tmux set-option -g message-style "bg=${gray},fg=${dark_gray}"
-
-    # status bar
-    tmux set-option -g status-style "bg=${gray},fg=${dark_gray}"
+    tmux set-option -g pane-border-style "fg=${color8}"
 
     # Status left
     if $show_powerline; then
-        tmux set-option -g status-left "#[bg=${green},fg=${dark_gray}]#{?client_prefix,#[bg=${yellow}],} ${left_icon} #[fg=${green},bg=${gray}]#{?client_prefix,#[fg=${yellow}],}${left_sep}"
-        powerbg=${gray}
+        tmux set-option -g status-left "#[bg=${color2},fg=${text}]#{?client_prefix,#[bg=${color3}],} ${left_icon} #[fg=${color2},bg=${color8}]#{?client_prefix,#[fg=${color3}],}${left_sep}"
+        powerbg=${color8}
     else
-        tmux set-option -g status-left "#[bg=${green},fg=${dark_gray}]#{?client_prefix,#[bg=${yellow}],} ${left_icon}"
+        tmux set-option -g status-left "#[bg=${color2},fg=${text}]#{?client_prefix,#[bg=${color3}],} ${left_icon}"
     fi
 
     # Status right
@@ -149,117 +139,117 @@ main() {
         if case $plugin in custom:*) true ;; *) false ;; esac then
             script=${plugin#"custom:"}
             if [[ -x "${current_dir}/${script}" ]]; then
-                IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-custom-plugin-colors" "blue dark_gray")
+                IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-custom-plugin-colors" "color4 text")
                 script="#($current_dir/${script})"
             else
-                colors[0]="red"
-                colors[1]="dark_gray"
+                colors[0]="color1"
+                colors[1]="text"
                 script="${script} not found!"
             fi
 
         elif [ $plugin = "cwd" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-cwd-colors" "dark_gray dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-cwd-colors" "text text")
             tmux set-option -g status-right-length 250
             script="#($current_dir/cwd.sh)"
 
         elif [ $plugin = "fossil" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-fossil-colors" "green dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-fossil-colors" "color2 text")
             tmux set-option -g status-right-length 250
             script="#($current_dir/fossil.sh)"
 
         elif [ $plugin = "git" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-git-colors" "green dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-git-colors" "color2 text")
             tmux set-option -g status-right-length 250
             script="#($current_dir/git.sh)"
 
         elif [ $plugin = "hg" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-hg-colors" "green dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-hg-colors" "color2 text")
             tmux set-option -g status-right-length 250
             script="#($current_dir/hg.sh)"
 
         elif [ $plugin = "battery" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-battery-colors" "pink dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-battery-colors" "color5 text")
             script="#($current_dir/battery.sh)"
 
         elif [ $plugin = "gpu-usage" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-gpu-usage-colors" "pink dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-gpu-usage-colors" "color5 text")
             script="#($current_dir/gpu_usage.sh)"
 
         elif [ $plugin = "gpu-ram-usage" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-gpu-ram-usage-colors" "blue dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-gpu-ram-usage-colors" "color4 text")
             script="#($current_dir/gpu_ram_info.sh)"
 
         elif [ $plugin = "gpu-power-draw" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-gpu-power-draw-colors" "green dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-gpu-power-draw-colors" "color2 text")
             script="#($current_dir/gpu_power.sh)"
 
         elif [ $plugin = "cpu-usage" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-cpu-usage-colors" "orange dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-cpu-usage-colors" "orange text")
             script="#($current_dir/cpu_info.sh)"
 
         elif [ $plugin = "ram-usage" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-ram-usage-colors" "blue dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-ram-usage-colors" "color4 text")
             script="#($current_dir/ram_info.sh)"
 
         elif [ $plugin = "tmux-ram-usage" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-tmux-ram-usage-colors" "blue dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-tmux-ram-usage-colors" "color4 text")
             script="#($current_dir/tmux_ram_info.sh)"
 
         elif [ $plugin = "network" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-network-colors" "blue dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-network-colors" "color4 text")
             script="#($current_dir/network.sh)"
 
         elif [ $plugin = "network-bandwidth" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-network-bandwidth-colors" "blue dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-network-bandwidth-colors" "color4 text")
             tmux set-option -g status-right-length 250
             script="#($current_dir/network_bandwidth.sh)"
 
         elif [ $plugin = "network-ping" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-network-ping-colors" "blue dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-network-ping-colors" "color4 text")
             script="#($current_dir/network_ping.sh)"
 
         elif [ $plugin = "network-vpn" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-network-vpn-colors" "blue dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-network-vpn-colors" "color4 text")
             script="#($current_dir/network_vpn.sh)"
 
         elif [ $plugin = "attached-clients" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-attached-clients-colors" "blue dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-attached-clients-colors" "color4 text")
             script="#($current_dir/attached_clients.sh)"
 
         elif [ $plugin = "mpc" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-mpc-colors" "green dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-mpc-colors" "color2 text")
             script="#($current_dir/mpc.sh)"
 
         elif [ $plugin = "spotify-tui" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-spotify-tui-colors" "green dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-spotify-tui-colors" "color2 text")
             script="#($current_dir/spotify-tui.sh)"
 
         elif [ $plugin = "apple-music" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-apple-music-colors" "green dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-apple-music-colors" "color2 text")
             script="#($current_dir/apple-music.sh)"
 
         elif [ $plugin = "playerctl" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-playerctl-colors" "green dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-playerctl-colors" "color2 text")
             script="#($current_dir/playerctl_nowplaying.sh)"
 
         elif [ $plugin = "kubernetes-context" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-kubernetes-context-colors" "blue dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-kubernetes-context-colors" "color4 text")
             script="#($current_dir/kubernetes_context.sh $eks_hide_arn $eks_extract_account $hide_kubernetes_user $show_kubernetes_context_label)"
 
         elif [ $plugin = "terraform" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-terraform-colors" "dark_blue dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-terraform-colors" "color4 text")
             script="#($current_dir/terraform.sh $terraform_label)"
 
         elif [ $plugin = "continuum" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-continuum-colors" "blue dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-continuum-colors" "color4 text")
             script="#($current_dir/continuum.sh)"
 
         elif [ $plugin = "weather" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-weather-colors" "orange dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-weather-colors" "color6 text")
             script="#($current_dir/weather_wrapper.sh $show_fahrenheit $show_location $fixed_location)"
 
         elif [ $plugin = "time" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-time-colors" "aqua dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-time-colors" "color6 text")
             if [ -n "$time_format" ]; then
                 script=${time_format}
             else
@@ -274,11 +264,11 @@ main() {
                 fi
             fi
         elif [ $plugin = "synchronize-panes" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-synchronize-panes-colors" "blue dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-synchronize-panes-colors" "color4 text")
             script="#($current_dir/synchronize_panes.sh $show_synchronize_panes_label)"
 
         elif [ $plugin = "ssh-session" ]; then
-            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-ssh-session-colors" "green dark_gray")
+            IFS=' ' read -r -a colors <<<$(get_tmux_option "@wal_tmux-ssh-session-colors" "color2 text")
             script="#($current_dir/ssh_session.sh $show_ssh_session_port)"
 
         else
@@ -303,12 +293,12 @@ main() {
 
     # Window option
     if $show_powerline; then
-        tmux set-window-option -g window-status-current-format "#[fg=${gray},bg=${aqua}]${left_sep}#[fg=${dark_gray},bg=${dark_purple}] #I #W${current_flags} #[fg=${dark_purple},bg=${gray}]${left_sep}"
+        tmux set-window-option -g window-status-current-format "#[fg=${color8},bg=${color6}]${left_sep}#[fg=${text},bg=${color7}] #I #W${current_flags} #[fg=${color7},bg=${color8}]${left_sep}"
     else
-        tmux set-window-option -g window-status-current-format "#[fg=${dark_gray},bg=${aqua}] #I #W${current_flags} "
+        tmux set-window-option -g window-status-current-format "#[fg=${text},bg=${color6}] #I #W${current_flags} "
     fi
 
-    tmux set-window-option -g window-status-format "#[fg=${dark_gray}]#[bg=${gray}] #I #W${flags}"
+    tmux set-window-option -g window-status-format "#[fg=${text}]#[bg=${color8}] #I #W${flags}"
     tmux set-window-option -g window-status-activity-style "bold"
     tmux set-window-option -g window-status-bell-style "bold"
 }
