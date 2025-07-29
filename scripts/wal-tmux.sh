@@ -293,9 +293,9 @@ main() {
 
     # Window option
     if $show_powerline; then
-        tmux set-window-option -g window-status-current-format "#[fg=${color8},bg=${color6}]${left_sep}#[fg=${text},bg=${color7}] #I #W${current_flags} #[fg=${color7},bg=${color8}]${left_sep}"
+        tmux set-window-option -g window-status-current-format "#[fg=${color8},bg=${color5}]${left_sep}#[fg=${text},bg=${color7}] #I #W${current_flags} #[fg=${color7},bg=${color8}]${left_sep}"
     else
-        tmux set-window-option -g window-status-current-format "#[fg=${text},bg=${color6}] #I #W${current_flags} "
+        tmux set-window-option -g window-status-current-format "#[fg=${text},bg=${color5}] #I #W${current_flags} "
     fi
 
     tmux set-window-option -g window-status-format "#[fg=${text}]#[bg=${color8}] #I #W${flags}"
