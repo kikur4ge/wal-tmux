@@ -42,7 +42,6 @@ main() {
     # status bar
     tmux set-option -g status-style "bg=${color8},fg=${text}"
 
-
     # Handle left icon configuration
     case $show_left_icon in
     smiley)
@@ -286,7 +285,8 @@ main() {
             if $show_empty_plugins; then
                 tmux set-option -ga status-right "#[fg=${!colors[1]},bg=${!colors[0]}] $script "
             else
-                tmux set-option -ga status-right "#{?#{==:$script,},,#[fg=${!colors[1]},bg=${!colors[0]}] $script }"
+                tmux set-option -ga status-right "#{?#{==:$script,},,#[fg=${!colors[1]}]#[bg=${!colors[0]}] $script }"
+
             fi
         fi
     done
